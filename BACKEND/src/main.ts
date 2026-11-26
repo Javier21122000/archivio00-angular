@@ -1,0 +1,17 @@
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module.js';
+import { configureApp } from './app.setup.js';
+import type { Env } from './config/env.js';
+
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create(AppModule);
+  const config = app.get<ConfigService<Env, true>>(ConfigService);
+  configureApp(app, config.get('FRONTEND_ORIGIN'), config.get('TRUST_PROXY'));
+  app.enableShutdownHooks();
+  const port = config.get('PORT');
+  await app.listen(port);
+  new Logger('Bootstrap').log(`API in ascolto su http://localhost:${port}/api`);
+}
+await bootstrap();
