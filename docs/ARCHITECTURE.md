@@ -30,7 +30,7 @@ Albero reale (verificato con `ls`; omessi `node_modules`, `dist`, immagini e fil
 archivio00-angular/
 ├── avvia.command / ferma.command     avvio e arresto locale (porte 3000, 4200)
 ├── docker-compose.yml                Postgres 18 + backend opzionale (mai eseguito)
-├── render.yaml                       blueprint di deploy su Render (non ancora verificato)
+├── render.yaml                       blueprint di deploy su Render
 ├── README.md
 ├── docs/                             ARCHITECTURE.md (questo file), DECISIONI.md,
 │                                     API-CONTRACT.md, LEARNING-GUIDE.md
@@ -691,7 +691,7 @@ Ambienti:
 | Test e2e backend | DB `archivio00_angular_test`, azzerato a ogni run | il test **rifiuta di partire** se `DB_NAME` non finisce con `_test` o se esiste `DATABASE_URL` |
 | Produzione | `npm run build && npm run start:prod` (`node dist/main.js`) | `NODE_ENV=production`; migration con `node dist/database/run-migrations.js` |
 | Docker | `BACKEND/Dockerfile` (multi-stage, utente `node`) e `docker-compose.yml` | **mai eseguiti** |
-| Render | `render.yaml` (database, API, sito statico con rewrite su `/api/*`) | **non ancora verificato** |
+| Render | `render.yaml` (database, API, sito statico con rewrite su `/api/*`) | deployato su Render (piano gratuito) |
 
 `synchronize: false` e' fisso in `buildDataSourceOptions`: lo schema cambia **solo** con migration. Il motivo: con `synchronize: true` TypeORM allinea il database alle entity all'avvio e, in produzione, puo' modificare o perdere dati. Il processo corretto e' scrivere una classe in `database/migrations/`, aggiungerla a `MIGRATIONS` e lanciare `npm run db:migrate`.
 

@@ -1,5 +1,5 @@
 # Blueprint di Render: crea database, API NestJS e sito Angular in un colpo solo.
-# NON ancora verificato su Render (vedi la sezione 9 del README).
+# Piano gratuito. Vedi la sezione 9 del README.
 databases:
   - name: archivio00-db
     databaseName: archivio00

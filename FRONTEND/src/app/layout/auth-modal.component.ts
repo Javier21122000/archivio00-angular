@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, input, isDevMode, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideArrowUpRight, LucideEye, LucideEyeOff, LucideLoaderCircle } from '@lucide/angular';
@@ -43,7 +43,7 @@ import { ModalComponent } from '../shared/modal.component';
           @else { {{ register() ? 'Crea account' : 'Accedi' }}<svg lucideArrowUpRight [size]="19"></svg> }
         </button>
       </form>
-      @if (!register()) {
+      @if (!register() && devMode) {
         <div class="quick-auth-box">
           <span class="eyebrow">DEV / TEST LOGIN</span>
           <p class="form-note">Esplora l’archivio con un profilo di prova.</p>
@@ -62,6 +62,9 @@ import { ModalComponent } from '../shared/modal.component';
 })
 export class AuthModalComponent implements OnInit {
   readonly mode = input.required<AuthMode>();
+
+  /** I login di prova esistono solo in sviluppo: online gli account demo non vengono creati. */
+  protected readonly devMode = isDevMode();
 
   protected readonly ui = inject(UiService);
   private readonly auth = inject(AuthService);

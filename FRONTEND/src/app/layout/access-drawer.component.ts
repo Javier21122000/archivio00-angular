@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, isDevMode, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   LucideArrowUpRight, LucideCheck, LucideGlobe, LucideHeart, LucideLoaderCircle, LucideLogOut, LucideShieldCheck,
@@ -33,6 +33,7 @@ import { ModalComponent } from '../shared/modal.component';
         }
       </div>
       <div class="test-actions">
+        @if (devMode) {
         <span class="eyebrow">ACCESSO RAPIDO · ACCOUNT REALI</span>
         <button type="button" class="button button-dark" [disabled]="busy() !== null" (click)="quickLogin('admin')">
           @if (busy() === 'admin') { <svg lucideLoaderCircle class="animate-spin" [size]="18"></svg> } @else { <svg lucideShieldCheck [size]="18"></svg> }
@@ -42,6 +43,7 @@ import { ModalComponent } from '../shared/modal.component';
           @if (busy() === 'user') { <svg lucideLoaderCircle class="animate-spin" [size]="18"></svg> } @else { <svg lucideHeart [size]="18"></svg> }
           Accedi come Utente Standard
         </button>
+        }
         @if (auth.user()) {
           <button type="button" class="text-button" (click)="logout()"><svg lucideLogOut [size]="16"></svg>Logout</button>
         } @else {
@@ -66,6 +68,8 @@ export class AccessDrawerComponent {
   protected readonly ui = inject(UiService);
   private readonly destroyRef = inject(DestroyRef);
 
+  /** I login rapidi usano gli account demo: esistono solo in sviluppo. */
+  protected readonly devMode = isDevMode();
   protected readonly busy = signal<'admin' | 'user' | null>(null);
   protected readonly rolesLabel = computed(() => this.auth.roles().join(' · '));
   protected readonly levels = [

@@ -6,7 +6,8 @@ E-commerce di abbigliamento vintage anni Duemila, costruito con Angular 22, Nest
 
 `Angular 22` · `NestJS 12` · `PostgreSQL + TypeORM` · `Tailwind CSS 4` · `TypeScript` · `Vitest` · `Playwright`
 
-> Stato del deploy: il blueprint per Render (`render.yaml`) è pronto ma **non è ancora stato verificato** su Render. L'URL pubblico verrà aggiunto qui quando il deploy sarà confermato.
+> **Online:** https://archivio00.onrender.com · API: https://archivio00-api.onrender.com/health
+> Gira sul piano gratuito di Render: dopo un po' di inattività l'API va in sleep e la prima visita può impiegare circa un minuto. Sul sito online non ci sono account demo né amministratore: chi vuole può registrarsi e usare i preferiti.
 
 ## Indice
 
@@ -333,7 +334,7 @@ I test e2e richiedono PostgreSQL attivo e, per Playwright, backend e frontend in
 
 Cose da sapere, con onestà:
 
-- **Il deploy è in corso di verifica**: il blueprint non è ancora stato confermato end-to-end su Render. L'URL pubblico verrà aggiunto qui.
+- **Deploy su Render**: verificato online (health, catalogo di 28 capi, registrazione, refresh delle rotte). Piano gratuito: l'API va in sleep, il database gratuito ha una scadenza. Account demo spenti online.
 - **Sul piano gratuito l'API va in sleep** dopo un periodo di inattività: la prima richiesta può impiegare decine di secondi per svegliarla.
 - Se i nomi `archivio00` o `archivio00-api` sono già occupati, vanno cambiati insieme a `FRONTEND_ORIGIN` e alla destinazione del rewrite.
 - `docker-compose.yml` e `BACKEND/Dockerfile` esistono ma **non sono mai stati eseguiti**: Docker non è installato sulla macchina di sviluppo.
