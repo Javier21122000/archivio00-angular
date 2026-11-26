@@ -1,0 +1,53 @@
+# ATTENZIONE: NON VERIFICATO. Docker non e' installato sul Mac di sviluppo, quindi
+# questo file non e' mai stato eseguito (ne' "docker compose config" ne' "up").
+#
+# Uso previsto:
+#   docker compose up -d postgres            # solo il database, su localhost:5433
+#   docker compose --profile backend up -d   # database + API su http://localhost:3000
+# La porta host 5433 evita il conflitto con il PostgreSQL locale su 5432.
+# Le password qui sotto sono SOLO per sviluppo locale: in produzione usa variabili segrete.
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: archivio
+      POSTGRES_PASSWORD: archivio_dev
+      POSTGRES_DB: archivio00_angular
+    ports:
+      - "5433:5432"
+    volumes:
+      # PostgreSQL 18 tiene i dati in una sottocartella versionata di /var/lib/postgresql.
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U archivio -d archivio00_angular"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Opzionale: parte solo con --profile backend.
+  backend:
+    profiles: ["backend"]
+    build: ./BACKEND
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: "3000"
+      FRONTEND_ORIGIN: http://localhost:4200
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_USER: archivio
+      DB_PASSWORD: archivio_dev
+      DB_NAME: archivio00_angular
+      DB_SSL: "false"
+      JWT_SECRET: solo-per-sviluppo-locale-0123456789abcdef0123456789
+      SEED_DEMO_USERS: "true"
+    ports:
+      - "3000:3000"
+    # Migration e seed (idempotenti) prima dell'avvio, cosi' il database e' sempre pronto.
+    command: ["sh", "-c", "node dist/database/run-migrations.js && node dist/database/run-seed.js && node dist/main.js"]
+
+volumes:
+  pgdata:

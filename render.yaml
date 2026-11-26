@@ -1,0 +1,54 @@
+# Blueprint di Render: crea database, API NestJS e sito Angular in un colpo solo.
+# NON ancora verificato su Render (vedi la sezione 9 del README).
+databases:
+  - name: archivio00-db
+    databaseName: archivio00
+    plan: free
+
+services:
+  # --- API NestJS -----------------------------------------------------------
+  - type: web
+    name: archivio00-api
+    runtime: node
+    rootDir: BACKEND
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    # Migration e seed sono idempotenti: si possono rilanciare a ogni avvio.
+    startCommand: node dist/database/run-migrations.js && node dist/database/run-seed.js && node dist/main.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: archivio00-db
+          property: connectionString
+      - key: DB_SSL
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: TRUST_PROXY
+        value: "1"
+      # Account demo con password note: NO su un sito pubblico.
+      - key: SEED_DEMO_USERS
+        value: "false"
+      # Cambia con l'URL reale del sito statico se il nome e' gia' occupato.
+      - key: FRONTEND_ORIGIN
+        value: https://archivio00.onrender.com
+
+  # --- Sito Angular (statico) ----------------------------------------------
+  - type: web
+    name: archivio00
+    runtime: static
+    rootDir: FRONTEND
+    buildCommand: npm ci && npx ng build
+    staticPublishPath: dist/frontend/browser
+    routes:
+      # Il browser chiama /api sulla stessa origine: Render lo inoltra all'API.
+      - type: rewrite
+        source: /api/*
+        destination: https://archivio00-api.onrender.com/api/*
+      # Rotte Angular (refresh su /catalogo ecc.)
+      - type: rewrite
+        source: /*
+        destination: /index.html
