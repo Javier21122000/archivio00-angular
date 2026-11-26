@@ -1,0 +1,27 @@
+# Dipendenze e build
+node_modules/
+dist/
+build/
+.angular/
+
+# Segreti e ambiente locale
+.env
+
+# Runtime locale dello script avvia.command
+.run/
+
+# Output di test e verifiche
+artifacts/
+test-results/
+playwright-report/
+
+# Sistema e editor
+.DS_Store
+.vscode/
+.claude/
+*.log
+__pycache__/
+*.pyc
+*.class
+target/
+*.tsbuildinfo
