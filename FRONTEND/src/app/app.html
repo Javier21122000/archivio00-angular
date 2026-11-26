@@ -1,0 +1,11 @@
+<a class="skip-link" href="#main">Vai al contenuto</a>
+<app-navbar />
+<main id="main" class="site-main"><router-outlet /></main>
+<app-footer />
+@if (ui.authMode(); as mode) {
+  <app-auth-modal [mode]="mode" />
+}
+@if (ui.testDrawer()) {
+  <app-access-drawer />
+}
+<app-toast />

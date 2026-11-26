@@ -1,0 +1,21 @@
+Sfondi animati delle pagine leggenda.
+
+In uso adesso: ronaldinho.webp, cristiano.webp, messi.webp
+(WebP animate, generate dalle GIF originali con
+ python3 scripts/converti_clip.py)
+
+Per sostituirne una: metti qui il file e aggiorna il campo `video`
+in src/app/data/leggende.ts. Il componente sceglie da solo <video> per
+mp4/webm e <img> per gif/webp animate.
+
+Se un file manca o e' illeggibile resta il ritratto con una lenta
+carrellata: non si rompe niente.
+
+ATTENZIONE: una GIF animata va copiata come file (per esempio dal
+Finder). Se passa da una chat o da un'app di messaggistica viene spesso
+appiattita al primo fotogramma e diventa un'immagine fissa.
+
+Le GIF originali pesavano 26 MB in tutto: erano improponibili come
+sfondo. Lo script le riduce a 384 px e a 26 fotogrammi, applica il
+trattamento pellicola e scende sotto 1,6 MB complessivi. Tanto sopra
+c'e' un velo chiaro, la risoluzione conta poco.
